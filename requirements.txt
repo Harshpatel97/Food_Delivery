@@ -1,0 +1,14 @@
+ensure
+pandas
+numpy 
+PyYAML
+matplotlib
+python-box
+
+
+
+
+
+
+
+-e .
