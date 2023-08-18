@@ -5,3 +5,9 @@ data_ingestion:
   source_URL: https://github.com/Harshpatel97/mlproject/raw/main/Food%20Delivery%20Dataset.zip
   local_data_file: artifacts/data_ingestion/data.zip
   unzip_dir: artifacts/data_ingestion
+
+
+data_transformation:
+  root_dir: artifacts/data_ingestion
+  data_path: E:\Food_Delivery\artifacts\data_ingestion\train.csv
+  
