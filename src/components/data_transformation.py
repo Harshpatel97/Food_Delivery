@@ -77,4 +77,4 @@ class DataTransformation:
         dist = self.distance(feat)
         nul = self.fill_na(dist)
         cat = self.cat_values(nul)
-        cat.to_csv(r"E:\Food_Delivery\artifacts\data_ingestion\Final_train.csv")
+        cat.to_csv(r"E:\Food_Delivery\artifacts\data_ingestion\Final_train.csv", index=False)
