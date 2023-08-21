@@ -10,7 +10,8 @@ class DataTransformation:
     def __init__(self, config: DataTransformationConfig):
         self.config = config
         
-    def feature_eng(self, data):
+    def feature_eng(self):
+        data = pd.read_csv(self.config.data_path)
         data.replace('NaN', float(np.nan), regex=True, inplace=True)
         data['Weatherconditions']=data['Weatherconditions'].str.split(" ", expand=True)[1]
         data['Time_taken(min)']=data['Time_taken(min)'].str.split(" ", expand=True)[1]
@@ -72,8 +73,7 @@ class DataTransformation:
     
     
     def convert(self):
-        df = pd.read_csv(self.config.data_path)
-        feat = self.feature_eng(df)
+        feat = self.feature_eng()
         dist = self.distance(feat)
         nul = self.fill_na(dist)
         cat = self.cat_values(nul)

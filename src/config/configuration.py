@@ -1,6 +1,6 @@
 from src.utils import create_directories, read_yaml
 from src.constants import *
-from src.entity import (DataIngestionConfig, DataTransformationConfig)
+from src.entity import (DataIngestionConfig, DataTransformationConfig, ModelTrainerConfig)
 
 class ConfigurationManager:
     def __init__(self,
@@ -40,3 +40,16 @@ class ConfigurationManager:
         )
 
         return data_transformation_config
+    
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        config = self.config.model_trainer
+
+        create_directories([config.root_dir])
+
+        model_trainer_config = ModelTrainerConfig(
+            root_dir=config.root_dir,
+            data_path=config.data_path,
+            model_path=config.model_path
+        )
+
+        return model_trainer_config
