@@ -36,7 +36,9 @@ class ConfigurationManager:
 
         data_transformation_config = DataTransformationConfig(
             root_dir=config.root_dir,
-            data_path=config.data_path
+            train_path=config.train_path,
+            test_path=config.test_path,
+            preprocessor_model_path=config.preprocessor_model_path
         )
 
         return data_transformation_config
@@ -48,7 +50,9 @@ class ConfigurationManager:
 
         model_trainer_config = ModelTrainerConfig(
             root_dir=config.root_dir,
-            data_path=config.data_path,
+            train_path=config.train_path,
+            test_path=config.test_path,
+            preprocessor_model_path=config.preprocessor_model_path,
             model_path=config.model_path
         )
 

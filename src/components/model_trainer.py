@@ -17,14 +17,21 @@ class ModelTrainer:
         self.config = config
         
     def initiate_model_training(self):
-        data = pd.read_csv(self.config.data_path)
-        X = data.drop('Time_taken(min)', axis = 1)
-        y = data['Time_taken(min)'] 
+        train = pd.read_csv(self.config.train_path)
+        test = pd.read_csv(self.config.test_path)
         
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+        X_train = train.drop('Time_taken(min)', axis = 1)
+        X_test = test
+        y_train = train['Time_taken(min)']
         
-        X_train = scaler.fit_transform(X_train)
-        X_test = scaler.transform(X_test)
+        preprocessor_path = self.config.preprocessor_model_path
+        
+        with open(preprocessor_path, 'rb') as file:
+            preprocessor = pickle.load(file)
+            
+        
+        X_train = preprocessor.fit_transform(X_train)
+        X_test = preprocessor.transform(X_test)
         
         
         rf = RandomForestRegressor()
@@ -33,5 +40,8 @@ class ModelTrainer:
         
         rf_model = self.config.model_path
         
+        logger.info(f"Saving model.pkl file at {rf_model}")
+        
         with open(rf_model, 'wb') as file:
             pickle.dump(rf, file)
+        

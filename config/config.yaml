@@ -8,14 +8,17 @@ data_ingestion:
 
 
 data_transformation:
-  root_dir: artifacts/data_ingestion
-  data_path: E:\Food_Delivery\artifacts\data_ingestion\train.csv
-
+  root_dir: artifacts/models
+  train_path: E:\Food_Delivery\artifacts\data_ingestion\train.csv
+  test_path: E:\Food_Delivery\artifacts\data_ingestion\test.csv
+  preprocessor_model_path: artifacts/models/Preprocessor.pkl
 
 model_trainer:
   root_dir: artifacts/models
-  data_path: E:\Food_Delivery\artifacts\data_ingestion\Final_train.csv
-  model_path: artifacts\models\DeliveryModel.pkl
+  train_path: E:\Food_Delivery\artifacts\data_ingestion\Final_train.csv
+  test_path: E:\Food_Delivery\artifacts\data_ingestion\Final_test.csv
+  preprocessor_model_path: artifacts/models/Preprocessor.pkl
+  model_path: artifacts/models/DeliveryModel.pkl
 
 
   

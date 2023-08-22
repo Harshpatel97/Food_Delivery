@@ -1,8 +1,14 @@
 import os
 from src.logging import logger
-import geopy.distance
-import numpy as np
 import pandas as pd
+import numpy as np
+import geopy.distance
+import pickle
+
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler,OneHotEncoder
+from sklearn.pipeline import Pipeline
 
 from src.entity import DataTransformationConfig
 
@@ -10,71 +16,125 @@ class DataTransformation:
     def __init__(self, config: DataTransformationConfig):
         self.config = config
         
-    def feature_eng(self):
-        data = pd.read_csv(self.config.data_path)
-        data.replace('NaN', float(np.nan), regex=True, inplace=True)
-        data['Weatherconditions']=data['Weatherconditions'].str.split(" ", expand=True)[1]
-        data['Time_taken(min)']=data['Time_taken(min)'].str.split(" ", expand=True)[1]
+    
+class DataTransformation:
+    def __init__(self, config: DataTransformationConfig):
+        self.config = config
         
+    def feature_eng(self):
+        train = pd.read_csv(self.config.train_path)
+        test = pd.read_csv(self.config.test_path)
+        
+        
+        train.replace('NaN', float(np.nan), regex=True, inplace=True)
+        test.replace('NaN', float(np.nan), regex=True, inplace=True)
+        
+        train['Weatherconditions']=train['Weatherconditions'].str.split(" ", expand=True)[1]
+        train['Time_taken(min)']=train['Time_taken(min)'].str.split(" ", expand=True)[1]
+        
+        test['Weatherconditions']=test['Weatherconditions'].str.split(" ", expand=True)[1]
         
         num_cols = ['Delivery_person_Age','Delivery_person_Ratings','Restaurant_latitude','Restaurant_longitude',
             'Delivery_location_latitude','Delivery_location_longitude','Vehicle_condition','multiple_deliveries',
             'Time_taken(min)']
         for col in num_cols:
-            data[col]=data[col].astype('float64')
-        
-        return data
+            train[col]=train[col].astype('float64')
             
-    def distance(self, data):
-    
-        data['Restaurant_latitude'] = data['Restaurant_latitude'].abs()
-        data['Restaurant_longitude'] = data['Restaurant_longitude'].abs()
+        for col in num_cols[:-1]:
+            test[col]=test[col].astype('float64')
         
-        restaurant_coordinates = data[['Restaurant_latitude', 'Restaurant_longitude']].to_numpy()
-        delivery_location_coordinates = data[['Delivery_location_latitude', 'Delivery_location_longitude']].to_numpy()
+        
+        return train, test
+            
+    def distance(self, train, test):
+    
+        train['Restaurant_latitude'] = train['Restaurant_latitude'].abs()
+        train['Restaurant_longitude'] = train['Restaurant_longitude'].abs()
+        
+        restaurant_coordinates = train[['Restaurant_latitude', 'Restaurant_longitude']].to_numpy()
+        delivery_location_coordinates = train[['Delivery_location_latitude', 'Delivery_location_longitude']].to_numpy()
         
         Distance = []
-        for i in range(len(data)):
+        for i in range(len(train)):
             dist = geopy.distance.geodesic(restaurant_coordinates[i], delivery_location_coordinates[i]).km
             Distance.append(dist)
 
-        data['Distance(kms)'] = Distance
+        train['Distance'] = Distance
         
-        return data
+        test['Restaurant_latitude'] = test['Restaurant_latitude'].abs()
+        test['Restaurant_longitude'] = test['Restaurant_longitude'].abs()
+        
+        restaurant_coordinates = test[['Restaurant_latitude', 'Restaurant_longitude']].to_numpy()
+        delivery_location_coordinates = test[['Delivery_location_latitude', 'Delivery_location_longitude']].to_numpy()
+        
+        Distance = []
+        for i in range(len(test)):
+            dist = geopy.distance.geodesic(restaurant_coordinates[i], delivery_location_coordinates[i]).km
+            Distance.append(dist)
 
-    def fill_na(self, data):
+        test['Distance'] = Distance
         
-        data['Delivery_person_Age'].fillna(29, inplace=True) 
-        data['Delivery_person_Ratings'].fillna(4.5, inplace=True)
-        data['Weatherconditions'].fillna('Sunny', inplace=True)
-        data['Road_traffic_density'].fillna('Low', inplace=True)
-        data['multiple_deliveries'].fillna(1.0, inplace=True)
-        data['Festival'].fillna('No', inplace=True)
-        data['City'].fillna('Metropolitian', inplace=True)
-        
-        data.drop(['ID', 'Delivery_person_ID', 'Time_Orderd','Time_Order_picked', 'Restaurant_latitude',
+        drop_cols = ['ID', 'Delivery_person_ID', 'Time_Orderd','Time_Order_picked', 'Restaurant_latitude',
             'Restaurant_longitude','Delivery_location_latitude', 'Delivery_location_longitude',
-            'Order_Date'],axis=1,inplace=True)
+            'Order_Date']
         
-        return data
+        train.drop(drop_cols, axis=1, inplace=True)
+        test.drop(drop_cols, axis=1, inplace=True)
+        
+        train.to_csv(r"E:\Food_Delivery\artifacts\data_ingestion\Final_train.csv", index=False)
+        test.to_csv(r"E:\Food_Delivery\artifacts\data_ingestion\Final_test.csv", index=False)
+        return train, test
 
-    def cat_values(self, data):
+    def data_transformer(self):
+        categorical_columns = ['Type_of_order','Type_of_vehicle','Festival','City',
+                               'Road_traffic_density', 'Weatherconditions']
         
-        Road_encodes = {'Low ': 0, 'Medium ': 1, 'High ': 2, 'Jam ': 3, 'Low':0}
-        Weather_encodes = {'Sunny': 0,'Cloudy': 1, 'Windy': 2, 'Fog': 3, 'Stormy': 4, 'Sandstorms': 5}
-    
-        data['Road_traffic_density'] = data['Road_traffic_density'].replace(Road_encodes)
-        data['Weatherconditions'] = data['Weatherconditions'].replace(Weather_encodes)
+        numerical_columns=['Delivery_person_Age','Delivery_person_Ratings','Vehicle_condition',
+                              'multiple_deliveries','Distance']
+
+        # Numerical pipeline
+        numerical_pipeline = Pipeline(steps = [
+            ('impute', SimpleImputer(strategy = 'constant', fill_value=0)),
+            ('scaler', StandardScaler(with_mean=False))
+        ])
+
+        # Categorical Pipeline
+        categorical_pipeline = Pipeline(steps = [
+            ('impute', SimpleImputer(strategy = 'most_frequent')),
+            ('onehot', OneHotEncoder(handle_unknown = 'ignore')),
+            ('scaler', StandardScaler(with_mean=False))
+        ])
+
+        preprocessor = ColumnTransformer([
+            ('numerical_pipeline', numerical_pipeline,numerical_columns),
+            ('categorical_pipeline', categorical_pipeline,categorical_columns)
+        ])
         
-        categorical_columns = [feature for feature in data.columns if data[feature].dtypes == "O"]
-        data = pd.get_dummies(data, columns=categorical_columns, drop_first=True, dtype=int)
+        return preprocessor
         
-        return data
     
+    def initiate_data_transformation(self):
+        train, test = self.feature_eng()
+        self.distance(train, test)
+        preprocessor = self.data_transformer()
+        
+        
     
-    def convert(self):
-        feat = self.feature_eng()
-        dist = self.distance(feat)
-        nul = self.fill_na(dist)
-        cat = self.cat_values(nul)
-        cat.to_csv(r"E:\Food_Delivery\artifacts\data_ingestion\Final_train.csv", index=False)
+        X_train = train.drop('Time_taken(min)', axis = 1)
+        X_test = test
+        y_train = train['Time_taken(min)']
+        
+        
+        X_train = preprocessor.fit_transform(X_train)
+        X_test = preprocessor.transform(X_test)
+        
+        preprocessor_path = self.config.preprocessor_model_path
+        
+        logger.info(f"Saving preprocessor pickle file at {preprocessor_path}")
+        
+        with open(preprocessor_path, 'wb') as file:
+            pickle.dump(preprocessor, file)
+    
+        
+            
+        
