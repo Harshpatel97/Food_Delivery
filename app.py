@@ -32,11 +32,11 @@ def predict_datapoint():
             Distance = request.form.get('Distance')
             )
         
-        pred_df = data.get_data_as_data_frame()
+        pred_df = data.get_data_as_dataframe()
         print(pred_df)
         
         predict_pipeline = PredictionPipeline()
-        results = predict_pipeline.prdict(pred_df)
+        results = predict_pipeline.predict(pred_df)
         return render_template('home.html', results=results[0])
     
     
