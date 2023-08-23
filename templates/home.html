@@ -1,153 +1,139 @@
 <html>
 <body>
+    <center>
     <div class="login">
        <h1>Zomato delivery Time Prediction</h1>
    
        <form action="{{ url_for('predict_datapoint')}}" method="post">
         
-        <div>
-            <label class="form-label">Delivery Person Age</label>
-            <input class="form-control" type="number" name="Delivery_person_Age"
-                placeholder="Enter Age of Delivery Person" min='0' max='100' />
-        </div>
-
-        <div>
-            <label class="form-label">Delivery Person Ratings</label>
-            <input class="form-control" type="number" name="Delivery_person_Ratings"
-                placeholder="Enter Rating of Person" min='0' max='5' step='0.1' />
-        </div>
-
-        <div>
-            <label class="form-label">Weather Conditions</label>
-            <select class="form-control" name="Weatherconditions"
-                placeholder="Enter the Weather Conditions" required>
-                <option class="placeholder" selected disabled value="">Select Weather Conditions</option>
-                <option value="Fog">
-                    Foggy
-                </option>
-                <option value="Stormy">
-                    Stormy
-                </option>
-                <option value="Cloudy">
-                    Cloudy
-                </option>
-                <option value="Sandstorms">
-                    Sandstorms
-                </option>
-                <option value="Windy">
-                    Windy
-                </option>
-                <option value="Sunny">
-                    Sunny
-                </option>
-            </select>
-        </div>
-
-        <div>
-            <label class="form-label">Road Traffic</label>
-            <select class="form-control" name="Road_traffic_density" placeholder="Traffic" required>
-                <option class="placeholder" selected disabled value="">Select Road Traffic type</option>
-                <option value="Low">
-                    Low
-                </option>
-                <option value="Jam">
-                    Jam
-                </option>
-                <option value="Medium">
-                    Medium
-                </option>
-                <option value="High">
-                    High
-                </option>
-            </select>
-        </div>
-
-        <div>
-            <label class="form-label">Condtion of vehicle</label>
-            <input class="form-control" type="number" name="Vehicle_condition"
-                placeholder="Condtion of Vehicle" min='0' max='3' step='1'/>
+        <div class="section">
+            <div class="title">Delivery Person Age</div>
+            <div class="description">
+                <input type="text" id="Delivery_person_Age" name="Delivery_person_Age" placeholder="Enter AGE">
+            </div>
         </div>
         
-        <div>
-            <label class="form-label">Type of Order</label>
-            <select class="form-control" name="Type_of_order" placeholder="Order Type" required>
-                <option class="placeholder">Select the Order Type</option>
-                <option value="Snacks">
-                    Snacks
-                </option>
-                <option value="Meal">
-                    Meal
-                </option>
-                <option value="Drinks">
-                    Drinks
-                </option>
-                <option value="Buffet">
-                    Buffet
-                </option>
+
+        <div class="section">
+            <div class="title">Delivery Person Ratings</div>
+            <div class="description">
+                <input type="text" id="Delivery_person_Ratings" name="Delivery_person_Ratings" placeholder="Enter  rating (float)">
+            </div>
         </div>
 
-        <div>
-            <label class="form-label">Type of Vehicle</label>
-            <select class="form-control" name="Type_of_vehicle" placeholder="Type of Vehicle" required>
-                <option class="placeholder">Select the Vehicle Type</option>
-                <option value="motorcycle">
-                    Motorcycle
-                </option>
-                <option value="scooter">
-                    Scooter
-                </option>
-                <option value="electric_scooter">
-                    Electric Scooter
-                </option>
-                <option value="bicycle">
-                    Bicycle
-                </option>
+        <div class="section">
+            <div class="title">Weather Conditions</div>
+            <div class="description">
+              <select id="Weather_conditions" name="Weatherconditions">
+                <option value="Sunny">Sunny</option>
+                <option value="Cloudy">Cloudy</option>
+                <option value="Fog">Fog</option>
+                <option value="Windy">Windy</option>
+                <option value="Sandstorms">Sandstorms</option>
+                <option value="Stormy">Stormy</option>
+              </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="title">Road Traffic</div>
+            <div class="description">
+              <select id="Road_traffic_density" name="Road_traffic_density">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Jam">Jam</option>
+              </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="title">Vehicle Condition</div>
+            <div class="description">
+              <select id="Vehicle_condition" name="Vehicle_condition">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
         </div>
         
-        <div>
-            <label class="form-label">Multiple Deliveries</label>
-            <input class="form-control" type="number" name="multiple_deliveries"
-                placeholder="Multiple Deliveries" min='0' max='3' step='1'/>
+        <div class="section">
+            <div class="title">Order Type</div>
+            <div class="description">
+              <select id="Type_of_order" name="Type_of_order">
+                <option value="Drinks">Drinks</option>
+                <option value="Buffet">Buffet</option>
+                <option value="Snack">Snack</option>
+                <option value="Meal">Meal</option>
+              </select>
+            </div>
         </div>
 
-        <div>
-            <label class="form-label">Festival</label>
-            <select class="form-control" name="Festival" placeholder="Festival?" required>
-                <option class="placeholder" selected disabled value="">Festival</option>
-                <option value="Yes">
-                    Yes
-                </option>
-                <option value="No">
-                    No
-                </option>
+        <div class="section">
+            <div class="title">Vehicle Type</div>
+            <div class="description">
+              <select id="Type_of_vehicle" name="Type_of_vehicle">
+                <option value="scooter">scooter</option>
+                <option value="motorcycle">motorcycle</option>
+                <option value="electric_scooter">electric_scooter</option>
+                <option value="bicycle">bicycle</option>
+              </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="title">Multiple Deliveries</div>
+            <div class="description">
+              <select id="multiple_deliveries" name="multiple_deliveries">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
         </div>
 
-        <div>
-            <label class="form-label">City</label>
-            <select class="form-control" name="City" placeholder="City" required>
-                <option class="placeholder" selected disabled value="">City</option>
-                <option value="Metropolitian">
-                    Metropolitian
-                </option>
-                <option value="Urban">
-                    Urban
-                </option>
-                <option value="Semi-Urban">
-                    Semi-Urban
+        <div class="section">
+            <div class="title">Festival</div>
+            <div class="description">
+              <select id="Festival" name="Festival">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              
+              </select>
+            </div>
         </div>
 
-        <div>
-            <label class="form-label">Distance </label>
-            <input class="form-control" type="number" name="Distance"
-                placeholder="Distance to home" min='0' max='25'/>
+        <div class="section">
+            <div class="title">City</div>
+            <div class="description">
+              <select id="City" name="City">
+                <option value="Metropolitian">Metropolitian</option>
+                <option value="Urban">Urban</option>
+                <option value="Semi-Urban">Semi-Urban</option>
+              </select>
+            </div>
         </div>
 
-        <div>
-            <input class="btn btn-primary" type="submit" value="Predict the time taken" required />
+        <div class="section">
+            <div class="title">Distance</div>
+            <div class="description">
+                <input type="text" id="distance" name="Distance" placeholder="Enter  distance (float)">
+            </div>
         </div>
+
+        <div style="width:100%; float: left; text-align: center;">
+ 
+            <input type="submit" value="Submit" style="width: 150px; height: 40px; background-color: rgb(247, 8, 8); color: white; font-size: 23px;">
+       
+          </div>
+
     </form>
     <h2>
-       THE  prediction is {{results}}
+       The Food will come in {{results}} minutes.
     </h2>
+</center>
    <body>
 </html>
