@@ -23,7 +23,7 @@ https://github.com/Harshpatel97/Food_Delivery.git
 ### STEP 01- Create a conda environment after opening the repository
 
 ```bash
-conda create --name food python=3.8 -y
+conda create --name food python=3.9 -y
 ```
 
 ```bash
