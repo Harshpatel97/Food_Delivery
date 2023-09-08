@@ -8,11 +8,11 @@ class PredictionPipeline:
     
     def predict(self, features):
         try:
-            model_path = r"E:\Food_Delivery\artifacts\models\DeliveryModel.pkl"
+            model_path = r"artifacts\models\DeliveryModel.pkl"
             with open(model_path, 'rb') as file:
                 model = pickle.load(file)
                 
-            preprocessor_path = r"E:\Food_Delivery\artifacts\models\Preprocessor.pkl"
+            preprocessor_path = r"artifacts\models\Preprocessor.pkl"
             with open(preprocessor_path, 'rb') as file:
                 preprocessor = pickle.load(file)
             

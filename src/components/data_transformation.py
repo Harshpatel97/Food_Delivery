@@ -81,8 +81,8 @@ class DataTransformation:
         train.drop(drop_cols, axis=1, inplace=True)
         test.drop(drop_cols, axis=1, inplace=True)
         
-        train.to_csv(r"E:\Food_Delivery\artifacts\data_ingestion\Final_train.csv", index=False)
-        test.to_csv(r"E:\Food_Delivery\artifacts\data_ingestion\Final_test.csv", index=False)
+        train.to_csv(r"artifacts\data_ingestion\Final_train.csv", index=False)
+        test.to_csv(r"artifacts\data_ingestion\Final_test.csv", index=False)
         return train, test
 
     def data_transformer(self):
