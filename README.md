@@ -1,7 +1,15 @@
 # End to end Food-Delivery-Prediction-Time-Project
+The Food Delivery Time Prediction project is a machine learning-based solution aimed at estimating the delivery time for food orders placed through various delivery platforms. This project leverages historical data, machine learning algorithms, and predictive modeling to provide accurate estimates of when customers can expect their food to arrive.
+
+## Fearures
+
+1. Data Collection: Data is Downloaded from kaggle https://www.kaggle.com/datasets/bhanupratapbiswas/food-delivery-time-prediction-case-study
+2. Feature Engineering: We performed feature engineering to extract many useful informations, like using longitude and latitude to distance between restaurant and delivery location.
+3. Model Evaluation: We used RandomForestClassifier which got 83% accuracy when fine tuned with different hyperparameters.
+4. User Interface: Build Custom interface on Flask.
+5. Deployed: Deployed on AWS beanstalk and Azure. 
 
 ## Workflows
-
 1. Update config.yaml
 2. Update params.yaml
 3. Update entity
