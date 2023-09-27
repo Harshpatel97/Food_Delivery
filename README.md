@@ -1,4 +1,4 @@
-# End to end Food-Delivery-Prediction-Time-Project
+# End to end Food-Delivery-Time-Prediction-Project
 The Food Delivery Time Prediction project is a machine learning-based solution aimed at estimating the delivery time for food orders placed through various delivery platforms. This project leverages historical data, machine learning algorithms, and predictive modeling to provide accurate estimates of when customers can expect their food to arrive.
 
 ## Fearures
